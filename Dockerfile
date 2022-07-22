@@ -1,29 +1,30 @@
 ###############
 # BUILD IMAGE #
 ###############
-FROM public.ecr.aws/lambda/python:3-arm64 as builder
+FROM python:3.9-slim-buster AS build
 
-RUN apt-get install -y gdal-bin libgdal-dev g++
-RUN python -m pip install cython numpy -c requirements.txt
-
-# Python dependencies that require compilation
-COPY requirements.txt .
-RUN python -m pip install --no-binary fiona,rasterio,shapely -r requirements.txt
-RUN pip uninstall cython --yes
-
-# ------ Second stage
-# Start from a clean image
-FROM python:3.8.2-slim-buster as final
-
-# Install some required runtime libraries from apt
 RUN apt-get update \
-    && apt-get install --yes --no-install-recommends \
-        libfreexl1 libxml2 \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends \
+        build-essential=12.6 \
+        libpq-dev \
+        unixodbc-dev
 
-# Install the previously-built shared libaries from the builder image
-COPY --from=builder /usr/local /usr/local
-RUN ldconfig
+RUN apt-get install -y gpg-agent
+RUN apt-get install -y software-properties-common 
+RUN apt-get install -y ca-certificates wget
+
+RUN add-apt-repository ppa:ubuntugis/ppa -y &&  apt-get update
+RUN apt-get install -y gdal-bin libgdal-dev
+
+ARG CPLUS_INCLUDE_PATH=/usr/include/gdal
+ARG C_INCLUDE_PATH=/usr/include/gdal
+RUN pip install GDAL
+
+RUN apt-get install -y binutils libproj-dev gdal-bin
+ENV GDAL_DATA=/usr/share/gdal
+
+ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+ENV C_INCLUDE_PATH=/usr/include/gdal
 
 # virtualenv
 ENV VIRTUAL_ENV=/opt/venv
@@ -35,6 +36,10 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
+#################
+# RUNTIME IMAGE #
+#################
+FROM python:3.9-slim-buster AS runtime
 
 # setup user and group ids
 ARG USER_ID=1000
