@@ -1,30 +1,22 @@
 ###############
 # BUILD IMAGE #
 ###############
-FROM python:3.9-slim-buster AS build
+FROM python:3.9-slim AS build
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        build-essential=12.6 \
         libpq-dev \
         unixodbc-dev
+
+RUN apt update && apt install -y gcc g++ python3-gdal libgdal-dev
 
 RUN apt-get install -y gpg-agent
 RUN apt-get install -y software-properties-common 
 RUN apt-get install -y ca-certificates wget
 
-RUN add-apt-repository ppa:ubuntugis/ppa -y &&  apt-get update
-RUN apt-get install -y gdal-bin libgdal-dev
-
-ARG CPLUS_INCLUDE_PATH=/usr/include/gdal
-ARG C_INCLUDE_PATH=/usr/include/gdal
-RUN pip install GDAL
-
-RUN apt-get install -y binutils libproj-dev gdal-bin
-ENV GDAL_DATA=/usr/share/gdal
-
-ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
-ENV C_INCLUDE_PATH=/usr/include/gdal
+#ENV GDAL_DATA=/usr/share/gdal
+#ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+#ENV C_INCLUDE_PATH=/usr/include/gdal
 
 # virtualenv
 ENV VIRTUAL_ENV=/opt/venv
@@ -34,12 +26,16 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 # add and install requirements
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
+
+RUN pip install setuptools==57.5.0 numpy
+RUN pip install gdal==3.2.2
 RUN pip install -r requirements.txt
+
 
 #################
 # RUNTIME IMAGE #
 #################
-FROM python:3.9-slim-buster AS runtime
+FROM python:3.9-slim AS runtime
 
 # setup user and group ids
 ARG USER_ID=1000
