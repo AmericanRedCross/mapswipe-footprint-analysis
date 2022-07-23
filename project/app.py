@@ -21,11 +21,6 @@ import ee
 import time
 from cachetools import cached
 
-# service_account = 'mapswipe@test-333723.iam.gserviceaccount.com'
-# credentials = ee.ServiceAccountCredentials(service_account, 'project/test-333723-8c5ebc1338a3.json')
-# ee.Authenticate()
-# ee.Initialize()
-
 st.set_page_config(layout="wide", page_title="ARC MapSwipe data analysis")
 st.header('Project')
 
