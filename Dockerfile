@@ -8,11 +8,12 @@ RUN apt-get update \
         libpq-dev \
         unixodbc-dev
 
-RUN apt update && apt install -y gcc g++ python3-gdal libgdal-dev
+RUN apt update && apt install -y gcc g++ python3-gdal libgdal-dev libpq5 
 
 RUN apt-get install -y gpg-agent
 RUN apt-get install -y software-properties-common 
 RUN apt-get install -y ca-certificates wget
+RUN apt-get install tree
 
 #ENV GDAL_DATA=/usr/share/gdal
 #ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
@@ -36,6 +37,8 @@ RUN pip install -r requirements.txt
 # RUNTIME IMAGE #
 #################
 FROM python:3.9-slim AS runtime
+
+RUN apt update && apt install -y libpq5 
 
 # setup user and group ids
 ARG USER_ID=1000
