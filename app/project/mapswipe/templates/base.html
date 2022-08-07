@@ -1,0 +1,24 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="A minimalist layout. Built with Pico CSS.">
+  <link rel="stylesheet" href="{% static "css/pico/pico.min.css" %}">
+  <title>Good App</title>
+  {% block header %}
+  {% endblock %}
+  <style type="text/css">
+    body {
+      background: url("/static/images/footprints.svg");
+    }
+  </style>
+</head>
+<body>
+<main class="container-sm">
+  {% block container %}
+  {% endblock %}
+</main>
+</body>
+</html>

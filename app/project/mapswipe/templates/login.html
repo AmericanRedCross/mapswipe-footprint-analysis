@@ -1,0 +1,67 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign in example • Pico.css</title>
+    <meta name="description" content="A minimalist layout for Login pages. Built with Pico CSS.">
+    <link rel="shortcut icon" href="https://picocss.com/favicon.ico">
+    <link rel="canonical" href="https://picocss.com/examples/sign-in/">
+
+
+    <!-- Pico.css -->
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+
+    <!-- Custom styles for this example -->
+    <link rel="stylesheet" href="{% static 'css/pico/custom.css' %}">
+  </head>
+
+  <body>
+
+    <!-- Nav -->
+    <nav class="container-fluid">
+      <ul>
+        <li><a href="https://mapswipe.org/en/index.html" class="contrast" onclick="openInNewTab('mapswipe.org/en/index.html')"><strong>MapSwipe</strong></a></li>
+      </ul>
+      <ul>
+
+      </ul>
+    </nav><!-- ./ Nav -->
+
+    <!-- Main -->
+    <main class="container">
+      <article class="grid">
+        <div>
+          <hgroup>
+            <h1>Sign in</h1>
+            <h2>A validation tool for map-swiped buildings</h2>
+          </hgroup>
+          <form>
+            <input type="text" name="login" placeholder="Login" aria-label="Login" autocomplete="nickname" required>
+            <input type="password" name="password" placeholder="Password" aria-label="Password" autocomplete="current-password" required>
+            <fieldset>
+              <label for="remember">
+                <input type="checkbox" role="switch" id="remember" name="remember">
+                Remember me
+              </label>
+            </fieldset>
+            <button type="submit" class="contrast" onclick="event.preventDefault()">Login</button>
+          </form>
+        </div>
+        <div></div>
+      </article>
+    </main><!-- ./ Main -->
+
+    <!-- Footer -->
+    <footer class="container-fluid">
+      <small>Built with <a href="https://picocss.com" class="secondary">Pico</a> • <a href="https://github.com/picocss/examples/tree/master/sign-in/" class="secondary">Source code</a></small>
+    </footer><!-- ./ Footer -->
+
+    <!-- Minimal theme switcher -->
+    <script src="{% static 'js/minimalist-theme-switcher.js' %}"></script>
+
+  </body>
+
+</html>
