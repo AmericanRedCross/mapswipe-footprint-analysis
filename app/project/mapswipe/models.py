@@ -4,7 +4,6 @@ from django.contrib.gis.db import models as geom
 
 # Create your models here.
 
-
 class Building(models.Model):
     ogc_fid = models.AutoField(primary_key=True)
     idx = models.FloatField(blank=True, null=True)
